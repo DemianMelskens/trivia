@@ -1,6 +1,5 @@
 package nl.demian.trivia.services;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import nl.demian.trivia.domain.Question;
 import nl.demian.trivia.domain.dtos.TriviaResponseDTO;
@@ -15,18 +14,28 @@ import java.util.Set;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
 public class TriviaService {
 
-    @Value("${trivia.api.url}")
-    private String triviaUrl;
+    private final String triviaUrl;
+    private final int amount;
 
-    @Value("${trivia.amount}")
-    private int amount;
+    private final RestTemplate restTemplate;
+    private final AnswerService answerService;
+    private final TriviaApiResponseMapper triviaApiResponseMapper;
 
-    final RestTemplate restTemplate;
-    final AnswerService answerService;
-    final TriviaApiResponseMapper triviaApiResponseMapper;
+    public TriviaService(
+            @Value("${trivia.api.url}") final String triviaUrl,
+            @Value("${trivia.amount}") final int amount,
+            final RestTemplate restTemplate,
+            final AnswerService answerService,
+            final TriviaApiResponseMapper triviaApiResponseMapper
+    ) {
+        this.triviaUrl = triviaUrl;
+        this.amount = amount;
+        this.restTemplate = restTemplate;
+        this.answerService = answerService;
+        this.triviaApiResponseMapper = triviaApiResponseMapper;
+    }
 
     public Set<Question> getQuestions() {
         try {

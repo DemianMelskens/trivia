@@ -8,10 +8,9 @@ import nl.demian.trivia.mappers.TriviaApiResponseMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,13 +33,12 @@ class TriviaServiceTest {
     @Mock
     TriviaApiResponseMapper triviaApiResponseMapper;
 
-    @InjectMocks
     private TriviaService triviaService;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(triviaService, "triviaUrl", "https://opentdb.com/api.php?amount=");
-        ReflectionTestUtils.setField(triviaService, "amount", 5);
+        MockitoAnnotations.openMocks(this);
+        this.triviaService = new TriviaService("https://opentdb.com/api.php?amount=", 5, restTemplate, answerService, triviaApiResponseMapper);
     }
 
     @Test
